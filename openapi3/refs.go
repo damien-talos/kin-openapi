@@ -579,7 +579,11 @@ func (x *SchemaRef) isEmpty() bool { return x == nil || x.Ref == "" && x.Value =
 // MarshalYAML returns the YAML encoding of SchemaRef.
 func (x SchemaRef) MarshalYAML() (interface{}, error) {
 	if ref := x.Ref; ref != "" {
-		return &Ref{Ref: ref}, nil
+		refValue := &Ref{Ref: ref}
+		if x.Value != nil && x.Value.Description != "" {
+			refValue.Description = x.Value.Description
+		}
+		return refValue, nil
 	}
 	return x.Value.MarshalYAML()
 }
